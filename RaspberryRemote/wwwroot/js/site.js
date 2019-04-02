@@ -1,4 +1,21 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+$(function () {
+    "use strict";
 
-// Write your JavaScript code.
+    var connection = new signalR.HubConnectionBuilder().withUrl("/LircHub").build();
+
+    connection.on("InfaredHandler", function (button) {
+        alert(button + " pressed");
+    });
+
+    $('#push-me').on('click', function () {
+
+        connection.invoke("ButtonPressed", "arg1");
+
+    });
+
+    connection.start().then(function () {
+        console.log("connection started");
+    });
+
+});
