@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace RaspberryRemote
 {
@@ -82,7 +81,7 @@ namespace RaspberryRemote
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true,
-                Arguments = "-c \"irsend list 'LG_AKB72915207' ''\"",
+                Arguments = $"-c \"irsend list '{Constants.REMOTE_NAME}' ''\"",
             };
 
             Process proc = Process.Start(procInfo);

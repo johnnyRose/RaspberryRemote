@@ -11,16 +11,15 @@ $(function () {
     });
 
     $('.lirc-button').on('click', function () {
-
-        connection.invoke("ButtonPressed", "KEY_POWER");//$(this).val());
-
+        connection.invoke("ButtonPressed", $(this).val());
     });
 
     startConnection();
 
     function startConnection() {
         connection.start().then(function () {
-            console.log("connection started");
+            $('.loading').addClass('hidden');
+            $('#lirc-buttons').removeClass('hidden');
         });
     }
 

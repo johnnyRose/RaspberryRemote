@@ -10,7 +10,7 @@ namespace RaspberryRemote.Hubs
         {
             if (Startup.AllowedKeys != null && Startup.AllowedKeys.Contains(key))
             {
-                string command = $"-c \"irsend send_once LG_AKB72915207 {key}\"";
+                string command = $"-c \"irsend send_once {Constants.REMOTE_NAME} {key}\"";
                 Console.WriteLine(command);
 
                 ProcessStartInfo procInfo = new ProcessStartInfo

@@ -3,13 +3,19 @@
 }
 
 <div class="row">
-    <button class="btn btn-default lirc-button">KEY_POWER</button>
+    <div class="col-md-12">
+        <p class="loading">Waiting for SignalR connection...</p>
+
+        <div class="hidden" id="lirc-buttons">
+            <button class="btn btn-default lirc-button" value="KEY_POWER">Power</button>
+        </div>
+    </div>
 </div>
 
 <div class="row">
-    <ul id="feedback">
-
-    </ul>
+    <div class="col-md-12">
+        <ul id="feedback"></ul>
+    </div>
 </div>
 
 @section Scripts {
