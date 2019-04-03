@@ -16,7 +16,7 @@ namespace RaspberryRemote
     public class Startup
     {
         // This doesn't really go here, but it's easy, fast, and it works. :)
-        public static List<string> AllowedKeys;
+        public static HashSet<string> AllowedKeys;
 
         public Startup(IConfiguration configuration)
         {
@@ -71,10 +71,10 @@ namespace RaspberryRemote
             });
         }
 
-        private List<string> GetAllowedKeys()
+        private HashSet<string> GetAllowedKeys()
         {
             // Thanks to https://github.com/mikaelsnavy/LircSharpAPI for making this easy on me
-            List<string> keys = new List<string>();
+            HashSet<string> keys = new HashSet<string>();
 
             ProcessStartInfo procInfo = new ProcessStartInfo
             {
@@ -82,7 +82,7 @@ namespace RaspberryRemote
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true,
-                Arguments = "-c \"irsend list 'LG_AKB72915207' ''",
+                Arguments = "-c \"irsend list 'LG_AKB72915207' ''\"",
             };
 
             Process proc = Process.Start(procInfo);
@@ -98,7 +98,9 @@ namespace RaspberryRemote
                     line = reader.ReadLine();
                     if (!string.IsNullOrWhiteSpace(line) && line.Contains(' '))
                     {
-                        keys.Add(line.Split(' ')[1]);
+                        string key = line.Split(' ')[1];
+                        Console.WriteLine("Adding key " + key);
+                        keys.Add(key);
                     }
 
                 } while (line != null);

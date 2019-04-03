@@ -4,18 +4,24 @@ $(function () {
 
     var connection = new signalR.HubConnectionBuilder().withUrl("/LircHub").build();
 
+    connection.onclose(startConnection);
+
     connection.on("InfaredHandler", function (button) {
-        alert(button + " pressed");
+        $('#feedback').append("<li>" + new Date().toLocaleString() + " - " + button + "</li>");
     });
 
-    $('#push-me').on('click', function () {
+    $('.lirc-button').on('click', function () {
 
-        connection.invoke("ButtonPressed", "arg1");
+        connection.invoke("ButtonPressed", "KEY_POWER");//$(this).val());
 
     });
 
-    connection.start().then(function () {
-        console.log("connection started");
-    });
+    startConnection();
+
+    function startConnection() {
+        connection.start().then(function () {
+            console.log("connection started");
+        });
+    }
 
 });
