@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RaspberryRemote.Hubs;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace RaspberryRemote
 {
     public class Startup
     {
+        // This doesn't really go here, but it's easy, fast, and it works. :)
+        public static List<string> AllowedKeys;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -40,6 +44,8 @@ namespace RaspberryRemote
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            AllowedKeys = this.GetAllowedKeys();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -63,6 +69,42 @@ namespace RaspberryRemote
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private List<string> GetAllowedKeys()
+        {
+            // Thanks to https://github.com/mikaelsnavy/LircSharpAPI for making this easy on me
+            List<string> keys = new List<string>();
+
+            ProcessStartInfo procInfo = new ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true,
+                Arguments = "-c \"irsend list 'LG_AKB72915207' ''",
+            };
+
+            Process proc = Process.Start(procInfo);
+            string strOut = proc.StandardOutput.ReadToEnd();
+            proc.WaitForExit();
+
+            /* Extract the remote names from the LIRC return*/
+            using (StringReader reader = new StringReader(strOut))
+            {
+                string line = string.Empty;
+                do
+                {
+                    line = reader.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(line) && line.Contains(' '))
+                    {
+                        keys.Add(line.Split(' ')[1]);
+                    }
+
+                } while (line != null);
+            }
+
+            return keys;
         }
     }
 }

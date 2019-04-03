@@ -5,9 +5,14 @@ namespace RaspberryRemote.Hubs
 {
     public class LircHub : Hub
     {
-        public async Task ButtonPressed(string arg)
+        public async Task ButtonPressed(string button)
         {
-            await Clients.All.SendAsync("InfaredHandler", arg);
+            if (/*Startup.AllowedKeys != null && Startup.AllowedKeys.Contains(button)*/true)
+            {
+                await Clients.All.SendAsync("InfaredHandler", Startup.AllowedKeys);
+
+            }
+            //await Clients.All.SendAsync("InfaredHandler", arg);
         }
     }
 }
