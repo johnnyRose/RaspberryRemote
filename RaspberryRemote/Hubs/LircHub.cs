@@ -22,7 +22,7 @@ namespace RaspberryRemote.Hubs
                     Arguments = command,
                 };
 
-                Process proc = Process.Start(procInfo);
+                Process.Start(procInfo);
             }
         }
     }

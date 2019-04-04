@@ -88,10 +88,9 @@ namespace RaspberryRemote
             string strOut = proc.StandardOutput.ReadToEnd();
             proc.WaitForExit();
 
-            /* Extract the remote names from the LIRC return*/
             using (StringReader reader = new StringReader(strOut))
             {
-                string line = string.Empty;
+                string line;
                 do
                 {
                     line = reader.ReadLine();
