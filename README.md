@@ -1,6 +1,8 @@
 # RaspberryRemote
 A universal remote control project using the Raspberry Pi.
 
+Currently just a proof-of-concept - code is not production ready and does not follow best practices.
+
 Tutorials
 - https://www.hackster.io/austin-stanton/creating-a-raspberry-pi-universal-remote-with-lirc-2fd581
 - https://raspberrypi.stackexchange.com/a/70946/98721
